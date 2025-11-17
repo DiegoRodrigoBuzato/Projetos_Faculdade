@@ -138,12 +138,14 @@ Depois de iniciar Apache e MySQL no XAMPP, acesse:
 http://localhost/agendamento
 
 📂 Estrutura do Projeto
+```
 /agendamento
-│── index.php
-│── php/
-│── css/
-│── js/
-└── db/
+├── index.php
+├── php/        # Arquivos PHP (back-end, controladores, lógica)
+├── css/        # Folhas de estilo
+├── js/         # Scripts JavaScript
+└── db/         # Arquivo(s) SQL do banco de dados
+```
 
 🧑‍💻 Contribuição
 
