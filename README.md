@@ -6,9 +6,6 @@ Aqui você encontrará aplicações, estudos dirigidos e sistemas completos que 
 ---
 
 
-
----
-
 ## 🚀 Tecnologias Utilizadas
 
 Este repositório inclui projetos que utilizam diversas tecnologias, como:
