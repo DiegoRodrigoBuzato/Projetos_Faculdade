@@ -7,6 +7,7 @@ Desenvolvido em HTML, CSS, JavaScript e PHP, com banco de dados MySQL.
 
 De acordo com o diretório exibido:
 
+```
 /controle_financeiro
 ├── api/                # Arquivos PHP (back-end, APIs e lógica)
 ├── assets/             # Imagens, CSS e JS
@@ -18,6 +19,7 @@ De acordo com o diretório exibido:
 ├── login.html          # Autenticação de usuários
 ├── relatorios.html     # Relatórios financeiros
 └── README.md
+```
 
 🚀 Funcionalidades Principais
 🔐 Autenticação
