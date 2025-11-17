@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login - Sistema Hospitalar</title>
+    <script>
+        // Remove histórico para impedir que o usuário volte após logout
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+        
+        // Exibir mensagens de erro
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const erro = urlParams.get('erro');
+            const msg = urlParams.get('msg');
+            
+            const mensagens = {
+                'login_invalido': 'Usuário ou senha inválidos!',
+                'campos_vazios': 'Preencha todos os campos!',
+                'senha_invalida': 'Senha incorreta!',
+                'usuario_nao_encontrado': 'Usuário não encontrado!',
+                'erro_sistema': 'Erro no sistema. Tente novamente.',
+                'sessao_expirada': 'Sua sessão expirou. Faça login novamente.'
+            };
+            
+            const sucessos = {
+                'logout_sucesso': 'Logout realizado com sucesso!'
+            };
+            
+            if (erro && mensagens[erro]) {
+                mostrarMensagem(mensagens[erro], 'erro');
+            }
+            
+            if (msg && sucessos[msg]) {
+                mostrarMensagem(sucessos[msg], 'sucesso');
+            }
+        });
+        
+        function mostrarMensagem(texto, tipo) {
+            const container = document.querySelector('.container');
+            const mensagemDiv = document.createElement('div');
+            mensagemDiv.className = `mensagem ${tipo}`;
+            mensagemDiv.textContent = texto;
+            container.insertBefore(mensagemDiv, container.firstChild);
+            
+            setTimeout(function() {
+                mensagemDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form action="php/login.php" method="post">
+            <h1>🏥 SISTEMA HOSPITALAR</h1>
+            <div class="input-container">
+                <input type="text" placeholder="Usuário" name="usuario" required autofocus>
+            </div>
+            <div class="input-container">
+                <input type="password" placeholder="Senha" name="senha" required>
+            </div>
+            <button class="submit-button" type="submit">ENTRAR</button>
+            <div class="cadastrar-container">
+                <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                    Acesso padrão: <strong>admin</strong> / <strong>admin123</strong>
+                </p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Relatórios — Controle Financeiro</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="assets/js/app.js"></script>
+
+<script defer>
+document.addEventListener('DOMContentLoaded', async ()=>{
+  await setupNav('relatorios');
+
+  // Util: escreve fallback no canvas
+  function writeFallback(ctx, msg='Sem dados para exibir o gráfico.') {
+    const { width, height } = ctx.canvas;
+    ctx.clearRect(0,0,width,height);
+    ctx.font = '16px system-ui, Arial';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.fillText(msg, width/2, height/2);
+  }
+
+  // Lê as cores do CSS
+  const root = getComputedStyle(document.documentElement);
+  const GREEN = (root.getPropertyValue('--ok') || '#22c55e').trim();
+  const RED   = (root.getPropertyValue('--danger') || '#ef4444').trim();
+  const BORDER = '#0d1323';
+
+  // Busca dados da API
+  let r, cat;
+  try { r = await api('api/resumo.php'); } catch(e){ r = null; }
+  try { cat = await api('api/resumo.php?mode=categorias_mes'); } catch(e){ cat = null; }
+
+  // === Gráfico de Pizza  ===
+  const pieCtx = document.getElementById('pieCat').getContext('2d');
+  const labels = (cat && !cat.error && Array.isArray(cat.labels)) ? cat.labels : [];
+  const dataCat = (cat && !cat.error && Array.isArray(cat.data)) ? cat.data.map(v=>Number(v)||0) : [];
+
+  if (labels.length > 0 && dataCat.length === labels.length) {
+    const bg = labels.map(label => {
+      const t = (label || '').toString().toLowerCase();
+      return (t.includes('despesa') || t.includes('saída') || t.includes('saida')) ? RED : GREEN;
+    });
+
+    try {
+      new Chart(pieCtx, {
+        type:'pie',
+        data:{ labels, datasets:[{ data: dataCat, backgroundColor: bg, borderColor: BORDER, borderWidth: 2 }] },
+        options:{ plugins:{ legend:{ position:'bottom', labels:{ color:'#fff' } } } }
+      });
+    } catch(e) { writeFallback(pieCtx, 'Erro ao desenhar gráfico de categorias.'); }
+  } else {
+    writeFallback(pieCtx);
+  }
+
+  // === Gráfico de Barras===
+  const barCtx = document.getElementById('barMes').getContext('2d');
+  const receita = (r && !r.error) ? Number(r.receitas_mes) : NaN;
+  const despesa = (r && !r.error) ? Number(r.despesas_mes) : NaN;
+
+  const safeReceita = Number.isFinite(receita) ? receita : 0;
+  const safeDespesa = Number.isFinite(despesa) ? despesa : 0;
+
+  if (Number.isFinite(safeReceita) && Number.isFinite(safeDespesa)) {
+    try {
+      new Chart(barCtx, {
+        type:'bar',
+        data:{
+          labels:['Receitas','Despesas'],
+          datasets:[{
+            data:[safeReceita, safeDespesa],
+            backgroundColor:[GREEN, RED],
+            borderColor:BORDER,
+            borderWidth:2
+          }]
+        },
+        options:{
+          plugins:{ legend:{ display:false } },
+          scales:{
+            x:{ ticks:{ color:'#fff' }, grid:{ color:'#1e293b' } },
+            y:{ ticks:{ color:'#fff' }, grid:{ color:'#1e293b' } }
+          }
+        }
+      });
+    } catch(e) { writeFallback(barCtx, 'Erro ao desenhar gráfico de barras.'); }
+  } else {
+    writeFallback(barCtx);
+  }
+});
+</script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="container">
+  <h2>Relatórios</h2>
+  <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px,1fr));">
+    <div class="card">
+      <h3>Distribuição por Categoria (Mês)</h3>
+      <canvas id="pieCat"></canvas>
+    </div>
+    <div class="card">
+      <h3>Receitas x Despesas (Mês)</h3>
+      <canvas id="barMes"></canvas>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cadastro — Controle Financeiro</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script defer src="assets/js/app.js"></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const form = document.getElementById('cadForm');
+  const msg = document.getElementById('msg');
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    msg.textContent = '';
+    try{
+      const body = { nome: form.nome.value.trim(), email: form.email.value.trim(), senha: form.senha.value };
+      const r = await api('api/register.php', { method:'POST', body: JSON.stringify(body) });
+      if(r.success){ window.location = 'login.html'; } else { msg.textContent = r.error || 'Falha ao cadastrar'; }
+    }catch(err){ msg.textContent = err.message; }
+  });
+});
+</script>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="card login-card">
+    <h2>Criar conta</h2>
+    <div id="msg" class="alert" style="display:block"></div>
+    <form id="cadForm">
+      <div class="row full">
+        <input type="text" name="nome" placeholder="Nome completo" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="senha" placeholder="Senha" required>
+        <button type="submit">Cadastrar</button>
+      </div>
+    </form>
+    <p class="small">Já tem conta? <a href="login.html">Entrar</a></p>
+  </div>
+</div>
+</body>
+</html>
