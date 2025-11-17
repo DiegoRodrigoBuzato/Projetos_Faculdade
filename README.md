@@ -10,12 +10,12 @@ Aqui você encontrará aplicações, estudos dirigidos e sistemas completos que 
 
 Este repositório inclui projetos que utilizam diversas tecnologias, como:
 
-- **Linguagens:** Python, Java, JavaScript, PHP, C, SQL  
-- **Front-end:** HTML5, CSS3, Bootstrap, React  
-- **Back-end:** Node.js, PHP, Java Spring  
-- **Banco de Dados:** MySQL, PostgreSQL, SQLite  
-- **DevOps:** Docker, Git, GitHub Actions  
-- **Metodologias:** Scrum, Kanban, UML, Clean Code, SOLID  
+- **Linguagens:** Python,JavaScript, PHP, SQL  
+- **Front-end:** HTML5, CSS3
+- **Back-end:** PHP 
+- **Banco de Dados:** MySQL, SQLite  
+- **DevOps:** Git, GitHub Actions  
+- **Metodologias:** Scrum, Kanban, Clean Code, SOLID  
 
 ---
 
